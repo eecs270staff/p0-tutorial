@@ -39,43 +39,57 @@ We will install Apio and its required compilers (`iverilog` and `GTKWave`) direc
 To make sure everything is installed correctly, let's create a simple AND gate logic module and test it.
 
 ### 1. Create a Project Folder
-Create a brand new, empty folder on your computer named `and_gate_test`. Open this folder in VS Code (`File` -> `Open Folder`).
+Create a brand new, empty folder on your computer named `Project0`. Open this folder in VS Code (`File` -> `Open Folder`).
 
-### 2. Write the Logic Hardware (`and_gate.v`)
-Create a new file named `and_gate.v` and paste the following code:
+### 2. Write the top-level module (`Project0.v`)
+Create a new file named `Project0.v` and paste the following code:
 ```verilog
-module and_gate(
-    input a,
-    input b,
-    output y
+// File Name: Project0.v
+module Project0
+(
+    input  [2:0] SW,    // a, b, c
+    output [0:0] LEDG   // m
 );
-    assign y = a & b;
+    Majority M(.m(LEDG[0]), .b(SW[2]), .a(SW[1]), .c(SW[0]));
+endmodule
+```
+### 3. Write the Logic Hardware (`Majority.v`)
+Create a new file named `Majority.v` and paste the following code:
+```verilog
+// File Name: Majority.v
+module Majority (
+    input  a, b, c,
+    output m
+);
+    wire ab, ac, bc;
+    and a1(ab, a, b);
+    and a2(ac, a, c);
+    and a3(bc, b, c);
+    or  o1(m, ab, ac, bc);
 endmodule
 ```
 
-### 3. Write the Simulation Testbench (`and_gate_tb.v`)
-Create a second file named `and_gate_tb.v`. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:
+### 3. Write the Simulation Testbench (`TestBench0.v`)
+Create a second file named `TestBench0.v`. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:
 ```verilog
-`timescale 1ns/1ns
+// File Name: TestBench0.v
+`timescale 1 ns/1 ns
+module TestBench0();
+    reg  [2:0] SW;
+    wire [0:0] LEDG;
 
-module and_gate_tb;
-    reg a, b;
-    wire y;
-
-    // Instantiate our design under test (DUT)
-    and_gate uut (.a(a), .b(b), .y(y));
+    Majority M(.a(SW[2]), .b(SW[1]), .c(SW[0]), .m(LEDG[0]));
 
     initial begin
-        // CRITICAL: This line generate the waveform file for GTKWave
-        $dumpvars(0, and_gate_tb);
-
-        // Test all combinations of inputs
-        a = 0; b = 0; #10;
-        a = 0; b = 1; #10;
-        a = 1; b = 0; #10;
-        a = 1; b = 1; #10;
-
-        $finish; // End simulation
+        $dumpvars(0, TestBench0);
+        SW = 3'b000; #5;
+        SW = 3'b001; #5;
+        SW = 3'b010; #5;
+        SW = 3'b011; #5;
+        SW = 3'b100; #5;
+        SW = 3'b101; #5;
+        SW = 3'b110; #5;
+        SW = 3'b111; #5;
     end
 endmodule
 ```
@@ -103,10 +117,17 @@ If successful, **GTKWave** will automatically pop open on your screen!
 
 ## 📈 Step 5: Viewing Your Waveforms in GTKWave
 When GTKWave opens, it will look blank at first. Follow these quick steps to see your signals:
-1. In the top-left **SST** panel, click on `and_gate_tb`.
-2. In the panel below it, you will see your signals: `a`, `b`, and `y`.
-<!--3. Select all three signals (hold `Ctrl` or `Cmd` to click multiple), then click the **Append** button at the bottom left. -->
-3. Click the **Zoom Fit** icon (magnifying glass with an "all" box) in the top toolbar to see your complete timing diagram!
+1. In the top-left **SST** panel, click on `TestBench0->M`. 
+
+    ![Top-level module](assets/TestBench0.png)
+
+2. In the panel below it, you will see your signals/wires: `a`, `b`, `c`, `m`, etc.
+
+    ![Top-level module](assets/signals.png)
+3. Select the signals `a`, `b`, `c`, and `m`(hold `Ctrl` or `Cmd` to click multiple), then click the **Append** button at the bottom left.
+
+    ![Top-level module](assets/waves.png)
+4. Click the **Zoom Fit** icon (magnifying glass with an "all" box) in the top toolbar to see your complete timing diagram!
 
 ---
 

@@ -76,41 +76,54 @@
 <p>To make sure everything is installed correctly, let’s create a simple AND gate logic module and test it.</p>
 
 <h3 id="1-create-a-project-folder">1. Create a Project Folder</h3>
-<p>Create a brand new, empty folder on your computer named <code class="language-plaintext highlighter-rouge">and_gate_test</code>. Open this folder in VS Code (<code class="language-plaintext highlighter-rouge">File</code> -&gt; <code class="language-plaintext highlighter-rouge">Open Folder</code>).</p>
+<p>Create a brand new, empty folder on your computer named <code class="language-plaintext highlighter-rouge">Project0</code>. Open this folder in VS Code (<code class="language-plaintext highlighter-rouge">File</code> -&gt; <code class="language-plaintext highlighter-rouge">Open Folder</code>).</p>
 
-<h3 id="2-write-the-logic-hardware-and_gatev">2. Write the Logic Hardware (<code class="language-plaintext highlighter-rouge">and_gate.v</code>)</h3>
-<p>Create a new file named <code class="language-plaintext highlighter-rouge">and_gate.v</code> and paste the following code:</p>
-<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="n">and_gate</span><span class="p">(</span>
-    <span class="kt">input</span> <span class="n">a</span><span class="p">,</span>
-    <span class="kt">input</span> <span class="n">b</span><span class="p">,</span>
-    <span class="kt">output</span> <span class="n">y</span>
+<h3 id="2-write-the-top-level-module-project0v">2. Write the top-level module (<code class="language-plaintext highlighter-rouge">Project0.v</code>)</h3>
+<p>Create a new file named <code class="language-plaintext highlighter-rouge">Project0.v</code> and paste the following code:</p>
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: Project0.v</span>
+<span class="k">module</span> <span class="n">Project0</span>
+<span class="p">(</span>
+    <span class="kt">input</span>  <span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">SW</span><span class="p">,</span>    <span class="c1">// a, b, c</span>
+    <span class="kt">output</span> <span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">LEDG</span>   <span class="c1">// m</span>
 <span class="p">);</span>
-    <span class="k">assign</span> <span class="n">y</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">Majority</span> <span class="n">M</span><span class="p">(.</span><span class="n">m</span><span class="p">(</span><span class="n">LEDG</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">.</span><span class="n">b</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">.</span><span class="n">c</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
+<span class="k">endmodule</span>
+</code></pre></div></div>
+<h3 id="3-write-the-logic-hardware-majorityv">3. Write the Logic Hardware (<code class="language-plaintext highlighter-rouge">Majority.v</code>)</h3>
+<p>Create a new file named <code class="language-plaintext highlighter-rouge">Majority.v</code> and paste the following code:</p>
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: Majority.v</span>
+<span class="k">module</span> <span class="n">Majority</span> <span class="p">(</span>
+    <span class="kt">input</span>  <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span>
+    <span class="kt">output</span> <span class="n">m</span>
+<span class="p">);</span>
+    <span class="kt">wire</span> <span class="n">ab</span><span class="p">,</span> <span class="n">ac</span><span class="p">,</span> <span class="n">bc</span><span class="p">;</span>
+    <span class="kt">and</span> <span class="n">a1</span><span class="p">(</span><span class="n">ab</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+    <span class="kt">and</span> <span class="n">a2</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="kt">and</span> <span class="n">a3</span><span class="p">(</span><span class="n">bc</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="kt">or</span>  <span class="n">o1</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">ab</span><span class="p">,</span> <span class="n">ac</span><span class="p">,</span> <span class="n">bc</span><span class="p">);</span>
 <span class="k">endmodule</span>
 </code></pre></div></div>
 
-<h3 id="3-write-the-simulation-testbench-and_gate_tbv">3. Write the Simulation Testbench (<code class="language-plaintext highlighter-rouge">and_gate_tb.v</code>)</h3>
-<p>Create a second file named <code class="language-plaintext highlighter-rouge">and_gate_tb.v</code>. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:</p>
-<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">`timescale</span> <span class="mi">1</span><span class="n">ns</span><span class="o">/</span><span class="mi">1</span><span class="n">ns</span>
+<h3 id="3-write-the-simulation-testbench-testbench0v">3. Write the Simulation Testbench (<code class="language-plaintext highlighter-rouge">TestBench0.v</code>)</h3>
+<p>Create a second file named <code class="language-plaintext highlighter-rouge">TestBench0.v</code>. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:</p>
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: TestBench0.v</span>
+<span class="cp">`timescale</span> <span class="mi">1</span> <span class="n">ns</span><span class="o">/</span><span class="mi">1</span> <span class="n">ns</span>
+<span class="k">module</span> <span class="n">TestBench0</span><span class="p">();</span>
+    <span class="kt">reg</span>  <span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">SW</span><span class="p">;</span>
+    <span class="kt">wire</span> <span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">LEDG</span><span class="p">;</span>
 
-<span class="k">module</span> <span class="n">and_gate_tb</span><span class="p">;</span>
-    <span class="kt">reg</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
-    <span class="kt">wire</span> <span class="n">y</span><span class="p">;</span>
-
-    <span class="c1">// Instantiate our design under test (DUT)</span>
-    <span class="n">and_gate</span> <span class="n">uut</span> <span class="p">(.</span><span class="n">a</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="p">.</span><span class="n">b</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="p">.</span><span class="n">y</span><span class="p">(</span><span class="n">y</span><span class="p">));</span>
+    <span class="n">Majority</span> <span class="n">M</span><span class="p">(.</span><span class="n">a</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="p">.</span><span class="n">b</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">.</span><span class="n">c</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">.</span><span class="n">m</span><span class="p">(</span><span class="n">LEDG</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
 
     <span class="k">initial</span> <span class="k">begin</span>
-        <span class="c1">// CRITICAL: This line generate the waveform file for GTKWave</span>
-        <span class="p">$</span><span class="nb">dumpvars</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">and_gate_tb</span><span class="p">);</span>
-
-        <span class="c1">// Test all combinations of inputs</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">#</span><span class="mi">10</span><span class="p">;</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">#</span><span class="mi">10</span><span class="p">;</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">#</span><span class="mi">10</span><span class="p">;</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">#</span><span class="mi">10</span><span class="p">;</span>
-
-        <span class="p">$</span><span class="nb">finish</span><span class="p">;</span> <span class="c1">// End simulation</span>
+        <span class="p">$</span><span class="nb">dumpvars</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">TestBench0</span><span class="p">);</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b000</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b001</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b010</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b011</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b100</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b101</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b110</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b111</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
     <span class="k">end</span>
 <span class="k">endmodule</span>
 </code></pre></div></div>
@@ -140,10 +153,24 @@
 <h2 id="-step-5-viewing-your-waveforms-in-gtkwave">📈 Step 5: Viewing Your Waveforms in GTKWave</h2>
 <p>When GTKWave opens, it will look blank at first. Follow these quick steps to see your signals:</p>
 <ol>
-  <li>In the top-left <strong>SST</strong> panel, click on <code class="language-plaintext highlighter-rouge">and_gate_tb</code>.</li>
-  <li>In the panel below it, you will see your signals: <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, and <code class="language-plaintext highlighter-rouge">y</code>.
-<!--3. Select all three signals (hold `Ctrl` or `Cmd` to click multiple), then click the **Append** button at the bottom left. --></li>
-  <li>Click the <strong>Zoom Fit</strong> icon (magnifying glass with an “all” box) in the top toolbar to see your complete timing diagram!</li>
+  <li>
+    <p>In the top-left <strong>SST</strong> panel, click on <code class="language-plaintext highlighter-rouge">TestBench0-&gt;M</code>.</p>
+
+    <p><img src="/assets/TestBench0.png" alt="Top-level module" /></p>
+  </li>
+  <li>
+    <p>In the panel below it, you will see your signals/wires: <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, <code class="language-plaintext highlighter-rouge">c</code>, <code class="language-plaintext highlighter-rouge">m</code>, etc.</p>
+
+    <p><img src="/assets/signals.png" alt="Top-level module" /></p>
+  </li>
+  <li>
+    <p>Select the signals <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, <code class="language-plaintext highlighter-rouge">c</code>, and <code class="language-plaintext highlighter-rouge">m</code>(hold <code class="language-plaintext highlighter-rouge">Ctrl</code> or <code class="language-plaintext highlighter-rouge">Cmd</code> to click multiple), then click the <strong>Append</strong> button at the bottom left.</p>
+
+    <p><img src="/assets/waves.png" alt="Top-level module" /></p>
+  </li>
+  <li>
+    <p>Click the <strong>Zoom Fit</strong> icon (magnifying glass with an “all” box) in the top toolbar to see your complete timing diagram!</p>
+  </li>
 </ol>
 
 <hr />
