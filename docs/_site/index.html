@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>p0-tutorial</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="p0-tutorial" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="p0-tutorial" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="p0-tutorial" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","headline":"p0-tutorial","name":"p0-tutorial","url":"http://localhost:4000/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="preload" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" as="style" crossorigin="anonymous" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr">
+        <link rel="icon" href="https://eecs270staff.github.io/eecs270.org/assets/images/eecs270favicon.ico">
+        <link rel="stylesheet" href="https://eecs485staff.github.io/primer-spec/assets/v1.10/css/primer-spec-base.css">
+        <style>
+            /* Fix for Sequence Diagram participant font */
+            .primer-spec-mermaid-output text.actor {
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji" !important;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.min.js" crossorigin="anonymous" defer></script>
+
+        <!--
+            This page is formatted using Primer Spec.
+            Would you like to contribute to the theme?
+            Check out: https://github.com/eecs485staff/primer-spec
+        -->
+        <script>
+            window.PrimerSpecConfig = {
+                pdfPath: null, // @managed by build-primer-spec-action
+                siteQualifiedBaseUrl: 'http://localhost:4000/',
+                hideSidebarOnLoad: false,
+                disableSidebar: false,
+                defaultSubthemeName: 'default',
+                defaultSubthemeMode: 'system',
+                sitemapEnabled: true,
+                sitemapUrls: [{
+                        url: '/',
+                        path: 'README.md',current: true,
+                    },{
+                        url: '/assets/v1.10/css/primer-spec-base.css',
+                        path: 'assets/v1.10/css/primer-spec-base.scss',
+                    },{
+                        url: '/assets/v1.10/css/style.css',
+                        path: 'assets/v1.10/css/style.scss',
+                    },{
+                        url: '/Getting-Started-With-APIO.html',
+                        path: 'Getting-Started-With-APIO.md',
+                    },],
+                sitemapLabel: 'References',
+                sitemapSiteTitle: 'p0-tutorial',
+                useLegacyCodeBlocks: false,
+                defaultCodeblockVariant: "enhanced",
+                disableJokes: false
+            };
+        </script>
+        <script src="https://eecs485staff.github.io/primer-spec/assets/v1.10/js/primer_spec_plugin.min.js" crossorigin="anonymous" defer></script>
+    </head>
+    <body>
+        <div id="primer-spec-top"></div>
+        <div id="primer-spec-app-container" onclick="return true;"></div>
+
+        <div id="primer-spec-plugin-main-content">
+            
+            <h1 class="primer-spec-toc-ignore"><a href="http://localhost:4000/">p0-tutorial</a></h1>
+            
+
+            <h1 id="project-0-majority-tutorial">Project 0: Majority (Tutorial)</h1>
+
+<p>This tutorial walks through entering, compiling, simulating, and testing a simple Verilog design. Unlike later projects, all source files are provided complete so you can practice the workflow.</p>
+
+<h1 id="starter-files">Starter Files</h1>
+<ul>
+  <li><a href="/assets/Project0.v">Project0.v</a></li>
+  <li><a href="/assets/TestBench0.v">TestBench0.v</a></li>
+  <li><a href="/assets/Majority.v">Majority.v</a></li>
+  <li><a href="/assets/wave0.do">wave0.do</a> (ModelSim macro file)</li>
+</ul>
+
+<h1 id="design-specification">Design Specification</h1>
+<p>Design a logic circuit that takes 3 binary inputs <em>a</em>, <em>b</em>, <em>c</em> and returns a binary output <em>m</em> that is <code class="language-plaintext highlighter-rouge">1</code> when two or more inputs are <code class="language-plaintext highlighter-rouge">1</code>. This is the <strong>Majority</strong> function over 3 inputs.</p>
+
+<div style="background-color: white; padding: 10px; display: inline-block;">
+  <img src="./assets/project0/P0_Modules.png" alt="Project 0 Module Decomposition" width="600" />
+</div>
+
+<p><em>Figure 1: Project 0 interface and module instantiation graph. <code class="language-plaintext highlighter-rouge">Majority</code> is instantiated by both <code class="language-plaintext highlighter-rouge">Project0</code> and <code class="language-plaintext highlighter-rouge">TestBench0</code>.</em></p>
+
+<p>The design is split into three Verilog modules:</p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">Majority</code>:</strong> implements the function in terms of formal inputs <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, <code class="language-plaintext highlighter-rouge">c</code> and formal output <code class="language-plaintext highlighter-rouge">m</code>.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">Project0</code>:</strong> top-level module that connects <code class="language-plaintext highlighter-rouge">Majority</code> to the DE2-115 board’s switches and LED.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">TestBench0</code>:</strong> instantiates <code class="language-plaintext highlighter-rouge">Majority</code> for ModelSim simulation. Inputs are declared <code class="language-plaintext highlighter-rouge">reg</code> and outputs <code class="language-plaintext highlighter-rouge">wire</code> (covered later in the course).</li>
+</ul>
+
+<p>This three-module structure (top-level <code class="language-plaintext highlighter-rouge">Project*</code>, <code class="language-plaintext highlighter-rouge">TestBench*</code>, and an implementation module) is the template every project in the course follows.</p>
+
+<blockquote>
+  <p><strong>Module Instantiation Graph.</strong> A Verilog <em>module</em> is the basic hardware unit. Complex designs are decomposed into multiple modules, and the relationships are shown in a <em>module instantiation graph</em>. An arrow from module A to module B means A instantiates a copy of B.</p>
+</blockquote>
+
+<h1 id="verilog-implementation">Verilog Implementation</h1>
+
+<h2 id="project0-module">Project0 Module</h2>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: Project0.v</span>
+<span class="k">module</span> <span class="n">Project0</span>
+<span class="p">(</span>
+    <span class="kt">input</span>  <span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">SW</span><span class="p">,</span>    <span class="c1">// a, b, c</span>
+    <span class="kt">output</span> <span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">LEDG</span>   <span class="c1">// m</span>
+<span class="p">);</span>
+    <span class="n">Majority</span> <span class="n">M</span><span class="p">(.</span><span class="n">m</span><span class="p">(</span><span class="n">LEDG</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">.</span><span class="n">b</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">.</span><span class="n">c</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
+<span class="k">endmodule</span>
+</code></pre></div></div>
+
+<p><em>Figure 2: Top-level <code class="language-plaintext highlighter-rouge">Project0</code> module</em></p>
+
+<ul>
+  <li><strong>Comments:</strong> <code class="language-plaintext highlighter-rouge">//</code> for single-line, <code class="language-plaintext highlighter-rouge">/* ... */</code> for block comments.</li>
+  <li><strong>Lines 3–6</strong> declare the I/O. <code class="language-plaintext highlighter-rouge">SW</code> is a 3-bit input array (<code class="language-plaintext highlighter-rouge">SW[2:0]</code>); <code class="language-plaintext highlighter-rouge">LEDG</code> is a 1-bit output. Verilog requires both indices in a range declaration even when they are equal - <code class="language-plaintext highlighter-rouge">output [0] LEDG</code> is invalid.</li>
+  <li><strong>Line 8</strong> instantiates <code class="language-plaintext highlighter-rouge">Majority</code> as instance <code class="language-plaintext highlighter-rouge">M</code> and connects formals to actuals <strong>by name</strong> (<code class="language-plaintext highlighter-rouge">.formal(actual)</code>). The order of arguments doesn’t matter with this syntax. Equivalent positional syntax: <code class="language-plaintext highlighter-rouge">Majority M(SW[2], SW[1], SW[0], LEDG[0]);</code>.</li>
+</ul>
+
+<h2 id="majority-module">Majority Module</h2>
+
+<p>The output is <code class="language-plaintext highlighter-rouge">m = a&amp;b | a&amp;c | b&amp;c</code>. Two implementation styles produce the same circuit:</p>
+
+<p><strong>Behavioral:</strong></p>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: Majority.v</span>
+<span class="k">module</span> <span class="n">Majority</span> <span class="p">(</span>
+    <span class="kt">input</span>  <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span>
+    <span class="kt">output</span> <span class="n">m</span>
+<span class="p">);</span>
+    <span class="k">assign</span> <span class="n">m</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">b</span> <span class="o">||</span> <span class="n">a</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">||</span> <span class="n">b</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="p">;</span>
+<span class="k">endmodule</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">assign</code> keyword indicates <code class="language-plaintext highlighter-rouge">m</code> is a <em>combinational</em> signal - it’s re-evaluated whenever any right-hand-side input changes (<em>continuous assignment</em>). This is <strong>Behavioral Modeling</strong>: specify the function with Boolean expressions.</p>
+
+<p><strong>Structural</strong> (a netlist of gates):</p>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: Majority.v</span>
+<span class="k">module</span> <span class="n">Majority</span> <span class="p">(</span>
+    <span class="kt">input</span>  <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span>
+    <span class="kt">output</span> <span class="n">m</span>
+<span class="p">);</span>
+    <span class="kt">wire</span> <span class="n">ab</span><span class="p">,</span> <span class="n">ac</span><span class="p">,</span> <span class="n">bc</span><span class="p">;</span>
+    <span class="kt">and</span> <span class="n">a1</span><span class="p">(</span><span class="n">ab</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+    <span class="kt">and</span> <span class="n">a2</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="kt">and</span> <span class="n">a3</span><span class="p">(</span><span class="n">bc</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="kt">or</span>  <span class="n">o1</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">ab</span><span class="p">,</span> <span class="n">ac</span><span class="p">,</span> <span class="n">bc</span><span class="p">);</span>
+<span class="k">endmodule</span>
+</code></pre></div></div>
+
+<p>Gate instantiations follow the template <code class="language-plaintext highlighter-rouge">&lt;gate-type&gt; instance-name (output, input_1, ..., input_n)</code>. <strong>Gate types must be lowercase</strong> - <code class="language-plaintext highlighter-rouge">AND</code>, <code class="language-plaintext highlighter-rouge">And</code>, etc. are not recognized.</p>
+
+<h2 id="testbench0-module">TestBench0 Module</h2>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: TestBench0.v</span>
+<span class="cp">`timescale</span> <span class="mi">1</span> <span class="n">ns</span><span class="o">/</span><span class="mi">1</span> <span class="n">ns</span>
+<span class="k">module</span> <span class="n">TestBench0</span><span class="p">();</span>
+    <span class="kt">reg</span>  <span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">SW</span><span class="p">;</span>
+    <span class="kt">wire</span> <span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">LEDG</span><span class="p">;</span>
+
+    <span class="n">Majority</span> <span class="n">M</span><span class="p">(.</span><span class="n">a</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="p">.</span><span class="n">b</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">.</span><span class="n">c</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">.</span><span class="n">m</span><span class="p">(</span><span class="n">LEDG</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
+
+    <span class="k">initial</span> <span class="k">begin</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b000</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b001</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b010</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b011</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b100</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b101</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b110</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">SW</span> <span class="o">=</span> <span class="mb">3'b111</span><span class="p">;</span> <span class="p">#</span><span class="mi">5</span><span class="p">;</span>
+    <span class="k">end</span>
+<span class="k">endmodule</span>
+</code></pre></div></div>
+
+<p><em>Figure 3: Test bench for <code class="language-plaintext highlighter-rouge">Majority</code></em></p>
+
+<ul>
+  <li><strong>Line 2</strong> sets the simulation <strong>time scale</strong>: 1 unit = 1 ns, with 1 ns resolution.</li>
+  <li><strong>Argument list is empty</strong> - testbenches are purely simulations and don’t take I/O.</li>
+  <li>Inputs to the device under test are declared <code class="language-plaintext highlighter-rouge">reg</code>; outputs are <code class="language-plaintext highlighter-rouge">wire</code>.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">initial begin ... end</code> block enumerates all 8 input combinations, applying each for 5 time units. ModelSim executes these sequentially.</li>
+</ul>
+
+<h1 id="simulation-and-testing">Simulation and Testing</h1>
+
+<!--## ModelSim
+Simulate your design in ModelSim before submitting. See the [ModelSim Quick Start](./modelsim.html) for step-by-step setup with this project.-->
+
+<h2 id="apio">APIO</h2>
+<p>Simulate your design in APIO before submitting. See the <a href="./Getting-Started-With-APIO.html">APIO Quick Start</a> for step-by-step setup with for a small example. Please repeat the steps with the Majority Module given in this project.</p>
+
+<h2 id="local-simulation-alternative">Local Simulation (alternative)</h2>
+<p>You can also simulate locally with iverilog and gtkwave/VaporView. See the <a href="./simulation_tools.html">Local Simulation Tools Setup Guide</a>.</p>
+
+<h2 id="autograder">Autograder</h2>
+<p>Submit your code to the <a href="">EECS 270 Autograder</a>. The Autograder builds a testbench around your top-level module and a reference module, runs comparison tests, and reports one of:</p>
+
+<ul>
+  <li><strong>Syntax errors:</strong> fix in ModelSim before resubmitting.</li>
+  <li><strong>Failed tests:</strong> the Autograder shows the failing input pattern, the expected output, and your output. Reproduce in ModelSim, fix, and resubmit.</li>
+  <li><strong>All tests pass:</strong> verify the top-module on LabsLand. Resubmit to Autograder if you find issues.</li>
+</ul>
+
+<h2 id="labsland-verification">LabsLand Verification</h2>
+<p>After simulation passes, verify on a real DE2-115 board through LabsLand. See the <a href="./labsland.html">LabsLand Verification Guide</a>.</p>
+
+
+            
+        </div> <!-- .container-lg -->
+
+        
+    </body>
+</html>

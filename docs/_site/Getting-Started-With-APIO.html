@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>p0-tutorial</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="p0-tutorial" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="http://localhost:4000/Getting-Started-With-APIO.html" />
+<meta property="og:url" content="http://localhost:4000/Getting-Started-With-APIO.html" />
+<meta property="og:site_name" content="p0-tutorial" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="p0-tutorial" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"p0-tutorial","url":"http://localhost:4000/Getting-Started-With-APIO.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+      <link rel="icon" href="https://eecs270staff.github.io/eecs270.org/assets/images/eecs270favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="http://localhost:4000/">p0-tutorial</a></h1>
+      
+
+      <h1 id="lab-setup-guide-verilog-development-with-vs-code--apio">Lab Setup Guide: Verilog Development with VS Code &amp; Apio</h1>
+
+<p>Welcome to Digital Logic Design! In this course, we use <strong>Visual Studio Code (VS Code)</strong> paired with <strong>Apio</strong> to write, verify, and simulate Verilog code.</p>
+
+<p>This setup runs natively on <strong>Windows, macOS (including M1/M2/M3 Apple Silicon), and Linux</strong>. It matches our course autograder exactly, meaning if your code compiles and simulates correctly on your laptop, it will behave the same way when graded.</p>
+
+<hr />
+
+<h2 id="️-step-1-install-visual-studio-code">🛠️ Step 1: Install Visual Studio Code</h2>
+<p>If you do not already have it, download and install VS Code for your operating system:</p>
+<ul>
+  <li><strong>Download Link</strong>: <a href="https://visualstudio.com">https://visualstudio.com</a></li>
+</ul>
+
+<hr />
+
+<h2 id="-step-2-install-python">📦 Step 2: Install Python</h2>
+<p>Apio relies on Python to manage its backend tools.</p>
+<ol>
+  <li><strong>Download Link</strong>: <a href="https://python.org">https://python.org</a> (Download the latest stable version).</li>
+  <li><strong>CRITICAL STEP FOR WINDOWS USERS</strong>: During the installation wizard, you <strong>MUST</strong> check the box that says <strong>“Add python.exe to PATH”</strong> before clicking install. If you miss this, Apio will not work.</li>
+</ol>
+
+<hr />
+
+<h2 id="️-step-3-install-apio-and-toolchains">⚙️ Step 3: Install Apio and Toolchains</h2>
+<p>We will install Apio and its required compilers (<code class="language-plaintext highlighter-rouge">iverilog</code> and <code class="language-plaintext highlighter-rouge">GTKWave</code>) directly inside VS Code.</p>
+
+<ol>
+  <li>Open <strong>VS Code</strong>.</li>
+  <li>Click on the <strong>Extensions</strong> icon on the left sidebar (or press <code class="language-plaintext highlighter-rouge">Ctrl+Shift+X</code> on Windows, <code class="language-plaintext highlighter-rouge">Cmd+Shift+X</code> on Mac).</li>
+  <li>Search for <strong>“Apio”</strong> (by fpgawars) and click <strong>Install</strong>.</li>
+  <li>Once installed, look at the bottom status bar or open the command palette (<code class="language-plaintext highlighter-rouge">Ctrl+Shift+P</code> or <code class="language-plaintext highlighter-rouge">Cmd+Shift+P</code>).</li>
+  <li>Run the following command to download the compiler and simulator toolchains:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apio <span class="nb">install</span> <span class="nt">--all</span>
+</code></pre></div>    </div>
+    <p><em>Note: This download may take a few minutes. A success message will appear in your terminal when finished.</em></p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="-step-4-your-first-simulation-quick-test">🚀 Step 4: Your First Simulation (Quick Test)</h2>
+
+<p>To make sure everything is installed correctly, let’s create a simple AND gate logic module and test it.</p>
+
+<h3 id="1-create-a-project-folder">1. Create a Project Folder</h3>
+<p>Create a brand new, empty folder on your computer named <code class="language-plaintext highlighter-rouge">and_gate_test</code>. Open this folder in VS Code (<code class="language-plaintext highlighter-rouge">File</code> -&gt; <code class="language-plaintext highlighter-rouge">Open Folder</code>).</p>
+
+<h3 id="2-write-the-logic-hardware-and_gatev">2. Write the Logic Hardware (<code class="language-plaintext highlighter-rouge">and_gate.v</code>)</h3>
+<p>Create a new file named <code class="language-plaintext highlighter-rouge">and_gate.v</code> and paste the following code:</p>
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="n">and_gate</span><span class="p">(</span>
+    <span class="kt">input</span> <span class="n">a</span><span class="p">,</span>
+    <span class="kt">input</span> <span class="n">b</span><span class="p">,</span>
+    <span class="kt">output</span> <span class="n">y</span>
+<span class="p">);</span>
+    <span class="k">assign</span> <span class="n">y</span> <span class="o">=</span> <span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">;</span>
+<span class="k">endmodule</span>
+</code></pre></div></div>
+
+<h3 id="3-write-the-simulation-testbench-and_gate_tbv">3. Write the Simulation Testbench (<code class="language-plaintext highlighter-rouge">and_gate_tb.v</code>)</h3>
+<p>Create a second file named <code class="language-plaintext highlighter-rouge">and_gate_tb.v</code>. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:</p>
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">`timescale</span> <span class="mi">1</span><span class="n">ns</span><span class="o">/</span><span class="mi">1</span><span class="n">ns</span>
+
+<span class="k">module</span> <span class="n">and_gate_tb</span><span class="p">;</span>
+    <span class="kt">reg</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+    <span class="kt">wire</span> <span class="n">y</span><span class="p">;</span>
+
+    <span class="c1">// Instantiate our design under test (DUT)</span>
+    <span class="n">and_gate</span> <span class="n">uut</span> <span class="p">(.</span><span class="n">a</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="p">.</span><span class="n">b</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="p">.</span><span class="n">y</span><span class="p">(</span><span class="n">y</span><span class="p">));</span>
+
+    <span class="k">initial</span> <span class="k">begin</span>
+        <span class="c1">// CRITICAL: This line generate the waveform file for GTKWave</span>
+        <span class="p">$</span><span class="nb">dumpvars</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">and_gate_tb</span><span class="p">);</span>
+
+        <span class="c1">// Test all combinations of inputs</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">#</span><span class="mi">10</span><span class="p">;</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">#</span><span class="mi">10</span><span class="p">;</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">#</span><span class="mi">10</span><span class="p">;</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">#</span><span class="mi">10</span><span class="p">;</span>
+
+        <span class="p">$</span><span class="nb">finish</span><span class="p">;</span> <span class="c1">// End simulation</span>
+    <span class="k">end</span>
+<span class="k">endmodule</span>
+</code></pre></div></div>
+
+<h3 id="4-run-the-verification--simulation">4. Run the Verification &amp; Simulation</h3>
+<p>Open the VS Code built-in terminal (<code class="language-plaintext highlighter-rouge">Terminal</code> -&gt; <code class="language-plaintext highlighter-rouge">New Terminal</code>) and run these two commands:</p>
+
+<ul>
+  <li><strong>Create an ini file (we will change this step later in the course):</strong>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apio create <span class="nt">--board</span> icestick
+</code></pre></div>    </div>
+  </li>
+  <li><strong>To check for syntax errors:</strong>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apio lint
+</code></pre></div>    </div>
+  </li>
+  <li><strong>To run the simulation and view waveforms:</strong>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apio sim
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>If successful, <strong>GTKWave</strong> will automatically pop open on your screen!</p>
+
+<hr />
+
+<h2 id="-step-5-viewing-your-waveforms-in-gtkwave">📈 Step 5: Viewing Your Waveforms in GTKWave</h2>
+<p>When GTKWave opens, it will look blank at first. Follow these quick steps to see your signals:</p>
+<ol>
+  <li>In the top-left <strong>SST</strong> panel, click on <code class="language-plaintext highlighter-rouge">and_gate_tb</code>.</li>
+  <li>In the panel below it, you will see your signals: <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, and <code class="language-plaintext highlighter-rouge">y</code>.
+<!--3. Select all three signals (hold `Ctrl` or `Cmd` to click multiple), then click the **Append** button at the bottom left. --></li>
+  <li>Click the <strong>Zoom Fit</strong> icon (magnifying glass with an “all” box) in the top toolbar to see your complete timing diagram!</li>
+</ol>
+
+<hr />
+
+<h2 id="-common-troubleshooting">🛑 Common Troubleshooting</h2>
+<ul>
+  <li><strong>Error: “apio command not found”</strong>: Restart VS Code completely. If it still fails, your Python installation was not added to your system PATH. Re-run the Python installer and ensure the “Add to PATH” checkbox is clicked.</li>
+  <li><strong>GTKWave opens but is completely empty</strong>: Make sure your <code class="language-plaintext highlighter-rouge">_tb.v</code> file contains the exact <code class="language-plaintext highlighter-rouge">$dumpfile</code> and <code class="language-plaintext highlighter-rouge">$dumpvars</code> lines shown in the example above. Without them, no waveform data is saved for GTKWave to display.</li>
+</ul>
+
+
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+    
+  </body>
+</html>
