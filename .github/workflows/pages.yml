@@ -41,9 +41,9 @@ jobs:
       - name: 📁 Checkout code
         uses: actions/checkout@v2
       
-      - name: 🗜 Create starter-files tarball
-        run: |
-          make tarball
+      #- name: 🗜 Create starter-files tarball
+      #  run: |
+      #    make tarball
 
       # Build the Primer Spec website. The action places the fully-built
       # website in an `_site/` directory.
