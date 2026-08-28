@@ -47,6 +47,9 @@
                         url: '/',
                         path: 'README.md',current: true,
                     },{
+                        url: '/labsland.html',
+                        path: 'labsland.md',
+                    },{
                         url: '/assets/v1.10/css/primer-spec-base.css',
                         path: 'assets/v1.10/css/primer-spec-base.scss',
                     },{
@@ -81,26 +84,22 @@
 <h1 id="starter-files">Starter Files</h1>
 <ul>
   <li><a href="/assets/Project0.v">Project0.v</a></li>
-  <li><a href="/assets/TestBench0.v">TestBench0.v</a></li>
+  <li><a href="/assets/Project0_tb.v">Project0_tb.v</a></li>
   <li><a href="/assets/Majority.v">Majority.v</a></li>
-  <li><a href="/assets/wave0.do">wave0.do</a> (ModelSim macro file)</li>
 </ul>
 
 <h1 id="design-specification">Design Specification</h1>
 <p>Design a logic circuit that takes 3 binary inputs <em>a</em>, <em>b</em>, <em>c</em> and returns a binary output <em>m</em> that is <code class="language-plaintext highlighter-rouge">1</code> when two or more inputs are <code class="language-plaintext highlighter-rouge">1</code>. This is the <strong>Majority</strong> function over 3 inputs.</p>
 
-<div style="background-color: white; padding: 10px; display: inline-block;">
-  <img src="./assets/project0/P0_Modules.png" alt="Project 0 Module Decomposition" width="600" />
-</div>
-
-<p><em>Figure 1: Project 0 interface and module instantiation graph. <code class="language-plaintext highlighter-rouge">Majority</code> is instantiated by both <code class="language-plaintext highlighter-rouge">Project0</code> and <code class="language-plaintext highlighter-rouge">TestBench0</code>.</em></p>
+<p><img src="/assets/P0_Modules.png" alt="Project 0 Module Decomposition" />
+<em>Figure 1: Project 0 interface and module instantiation graph. <code class="language-plaintext highlighter-rouge">Majority</code> is instantiated by both <code class="language-plaintext highlighter-rouge">Project0</code> and <code class="language-plaintext highlighter-rouge">Project0_tb</code>.</em></p>
 
 <p>The design is split into three Verilog modules:</p>
 
 <ul>
   <li><strong><code class="language-plaintext highlighter-rouge">Majority</code>:</strong> implements the function in terms of formal inputs <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, <code class="language-plaintext highlighter-rouge">c</code> and formal output <code class="language-plaintext highlighter-rouge">m</code>.</li>
   <li><strong><code class="language-plaintext highlighter-rouge">Project0</code>:</strong> top-level module that connects <code class="language-plaintext highlighter-rouge">Majority</code> to the DE2-115 board’s switches and LED.</li>
-  <li><strong><code class="language-plaintext highlighter-rouge">TestBench0</code>:</strong> instantiates <code class="language-plaintext highlighter-rouge">Majority</code> for ModelSim simulation. Inputs are declared <code class="language-plaintext highlighter-rouge">reg</code> and outputs <code class="language-plaintext highlighter-rouge">wire</code> (covered later in the course).</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">Project0_tb</code>:</strong> instantiates <code class="language-plaintext highlighter-rouge">Majority</code> for ModelSim simulation. Inputs are declared <code class="language-plaintext highlighter-rouge">reg</code> and outputs <code class="language-plaintext highlighter-rouge">wire</code> (covered later in the course).</li>
 </ul>
 
 <p>This three-module structure (top-level <code class="language-plaintext highlighter-rouge">Project*</code>, <code class="language-plaintext highlighter-rouge">TestBench*</code>, and an implementation module) is the template every project in the course follows.</p>
@@ -122,8 +121,6 @@
     <span class="n">Majority</span> <span class="n">M</span><span class="p">(.</span><span class="n">m</span><span class="p">(</span><span class="n">LEDG</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">.</span><span class="n">b</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="p">.</span><span class="n">a</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">.</span><span class="n">c</span><span class="p">(</span><span class="n">SW</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
 <span class="k">endmodule</span>
 </code></pre></div></div>
-
-<p><em>Figure 2: Top-level <code class="language-plaintext highlighter-rouge">Project0</code> module</em></p>
 
 <ul>
   <li><strong>Comments:</strong> <code class="language-plaintext highlighter-rouge">//</code> for single-line, <code class="language-plaintext highlighter-rouge">/* ... */</code> for block comments.</li>
@@ -165,9 +162,9 @@
 
 <p>Gate instantiations follow the template <code class="language-plaintext highlighter-rouge">&lt;gate-type&gt; instance-name (output, input_1, ..., input_n)</code>. <strong>Gate types must be lowercase</strong> - <code class="language-plaintext highlighter-rouge">AND</code>, <code class="language-plaintext highlighter-rouge">And</code>, etc. are not recognized.</p>
 
-<h2 id="testbench0-module">TestBench0 Module</h2>
+<h2 id="project0_tb-module">Project0_tb Module</h2>
 
-<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: TestBench0.v</span>
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: Project0_tb.v</span>
 <span class="cp">`timescale</span> <span class="mi">1</span> <span class="n">ns</span><span class="o">/</span><span class="mi">1</span> <span class="n">ns</span>
 <span class="k">module</span> <span class="n">TestBench0</span><span class="p">();</span>
     <span class="kt">reg</span>  <span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">SW</span><span class="p">;</span>
@@ -188,8 +185,6 @@
 <span class="k">endmodule</span>
 </code></pre></div></div>
 
-<p><em>Figure 3: Test bench for <code class="language-plaintext highlighter-rouge">Majority</code></em></p>
-
 <ul>
   <li><strong>Line 2</strong> sets the simulation <strong>time scale</strong>: 1 unit = 1 ns, with 1 ns resolution.</li>
   <li><strong>Argument list is empty</strong> - testbenches are purely simulations and don’t take I/O.</li>
@@ -203,10 +198,10 @@
 Simulate your design in ModelSim before submitting. See the [ModelSim Quick Start](./modelsim.html) for step-by-step setup with this project.-->
 
 <h2 id="apio">APIO</h2>
-<p>Simulate your design in APIO before submitting. See the <a href="./Getting-Started-With-APIO.html">APIO Quick Start</a> for step-by-step setup with for a small example. Please repeat the steps with the Majority Module given in this project.</p>
+<p>Simulate your design in APIO before submitting. See the <a href="./Getting-Started-With-APIO.html">APIO Quick Start</a> for step-by-step setup with for a this example.</p>
 
-<h2 id="local-simulation-alternative">Local Simulation (alternative)</h2>
-<p>You can also simulate locally with iverilog and gtkwave/VaporView. See the <a href="./simulation_tools.html">Local Simulation Tools Setup Guide</a>.</p>
+<!--## Local Simulation (alternative)
+You can also simulate locally with iverilog and gtkwave/VaporView. See the [Local Simulation Tools Setup Guide](./simulation_tools.html).-->
 
 <h2 id="autograder">Autograder</h2>
 <p>Submit your code to the <a href="">EECS 270 Autograder</a>. The Autograder builds a testbench around your top-level module and a reference module, runs comparison tests, and reports one of:</p>

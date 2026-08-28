@@ -8,24 +8,22 @@ This tutorial walks through entering, compiling, simulating, and testing a simpl
 
 # Starter Files
 - [Project0.v](./assets/Project0.v)
-- [TestBench0.v](./assets/TestBench0.v)
+- [Project0_tb.v](./assets/Project0_tb.v)
 - [Majority.v](./assets/Majority.v)
-- [wave0.do](./assets/wave0.do) (ModelSim macro file)
+
 
 # Design Specification
 Design a logic circuit that takes 3 binary inputs *a*, *b*, *c* and returns a binary output *m* that is `1` when two or more inputs are `1`. This is the **Majority** function over 3 inputs.
 
-<div style="background-color: white; padding: 10px; display: inline-block;">
-  <img src="./assets/project0/P0_Modules.png" alt="Project 0 Module Decomposition" width="600">
-</div>
 
-*Figure 1: Project 0 interface and module instantiation graph. `Majority` is instantiated by both `Project0` and `TestBench0`.*
+![Project 0 Module Decomposition](assets/P0_Modules.png)
+*Figure 1: Project 0 interface and module instantiation graph. `Majority` is instantiated by both `Project0` and `Project0_tb`.*
 
 The design is split into three Verilog modules:
 
 - **`Majority`:** implements the function in terms of formal inputs `a`, `b`, `c` and formal output `m`.
 - **`Project0`:** top-level module that connects `Majority` to the DE2-115 board's switches and LED.
-- **`TestBench0`:** instantiates `Majority` for ModelSim simulation. Inputs are declared `reg` and outputs `wire` (covered later in the course).
+- **`Project0_tb`:** instantiates `Majority` for ModelSim simulation. Inputs are declared `reg` and outputs `wire` (covered later in the course).
 
 This three-module structure (top-level `Project*`, `TestBench*`, and an implementation module) is the template every project in the course follows.
 
@@ -45,8 +43,6 @@ module Project0
     Majority M(.m(LEDG[0]), .b(SW[2]), .a(SW[1]), .c(SW[0]));
 endmodule
 ```
-
-*Figure 2: Top-level `Project0` module*
 
 - **Comments:** `//` for single-line, `/* ... */` for block comments.
 - **Lines 3–6** declare the I/O. `SW` is a 3-bit input array (`SW[2:0]`); `LEDG` is a 1-bit output. Verilog requires both indices in a range declaration even when they are equal - `output [0] LEDG` is invalid.
@@ -88,10 +84,10 @@ endmodule
 
 Gate instantiations follow the template `<gate-type> instance-name (output, input_1, ..., input_n)`. **Gate types must be lowercase** - `AND`, `And`, etc. are not recognized.
 
-## TestBench0 Module
+## Project0_tb Module
 
 ```verilog
-// File Name: TestBench0.v
+// File Name: Project0_tb.v
 `timescale 1 ns/1 ns
 module TestBench0();
     reg  [2:0] SW;
@@ -112,8 +108,6 @@ module TestBench0();
 endmodule
 ```
 
-*Figure 3: Test bench for `Majority`*
-
 - **Line 2** sets the simulation **time scale**: 1 unit = 1 ns, with 1 ns resolution.
 - **Argument list is empty** - testbenches are purely simulations and don't take I/O.
 - Inputs to the device under test are declared `reg`; outputs are `wire`.
@@ -125,11 +119,11 @@ endmodule
 Simulate your design in ModelSim before submitting. See the [ModelSim Quick Start](./modelsim.html) for step-by-step setup with this project.-->
 
 ## APIO
-Simulate your design in APIO before submitting. See the [APIO Quick Start](./Getting-Started-With-APIO.html) for step-by-step setup with for a small example. Please repeat the steps with the Majority Module given in this project.
+Simulate your design in APIO before submitting. See the [APIO Quick Start](./Getting-Started-With-APIO.html) for step-by-step setup with for a this example.
 
 
-## Local Simulation (alternative)
-You can also simulate locally with iverilog and gtkwave/VaporView. See the [Local Simulation Tools Setup Guide](./simulation_tools.html).
+<!--## Local Simulation (alternative)
+You can also simulate locally with iverilog and gtkwave/VaporView. See the [Local Simulation Tools Setup Guide](./simulation_tools.html).-->
 
 ## Autograder
 Submit your code to the [EECS 270 Autograder]({{ site.data.config.links.autograder }}). The Autograder builds a testbench around your top-level module and a reference module, runs comparison tests, and reports one of:

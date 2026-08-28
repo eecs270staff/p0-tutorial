@@ -69,10 +69,10 @@ module Majority (
 endmodule
 ```
 
-### 3. Write the Simulation Testbench (`TestBench0.v`)
-Create a second file named `TestBench0.v`. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:
+### 3. Write the Simulation Testbench (`Project0_tb.v`)
+Create a second file named `Project0_tb.v`. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:
 ```verilog
-// File Name: TestBench0.v
+// File Name: Project0_tb.v
 `timescale 1 ns/1 ns
 module TestBench0();
     reg  [2:0] SW;

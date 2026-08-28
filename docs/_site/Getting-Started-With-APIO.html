@@ -104,9 +104,9 @@
 <span class="k">endmodule</span>
 </code></pre></div></div>
 
-<h3 id="3-write-the-simulation-testbench-testbench0v">3. Write the Simulation Testbench (<code class="language-plaintext highlighter-rouge">TestBench0.v</code>)</h3>
-<p>Create a second file named <code class="language-plaintext highlighter-rouge">TestBench0.v</code>. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:</p>
-<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: TestBench0.v</span>
+<h3 id="3-write-the-simulation-testbench-project0_tbv">3. Write the Simulation Testbench (<code class="language-plaintext highlighter-rouge">Project0_tb.v</code>)</h3>
+<p>Create a second file named <code class="language-plaintext highlighter-rouge">Project0_tb.v</code>. This file tells the simulator what inputs to inject so you can watch the output change. Paste this code:</p>
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// File Name: Project0_tb.v</span>
 <span class="cp">`timescale</span> <span class="mi">1</span> <span class="n">ns</span><span class="o">/</span><span class="mi">1</span> <span class="n">ns</span>
 <span class="k">module</span> <span class="n">TestBench0</span><span class="p">();</span>
     <span class="kt">reg</span>  <span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">SW</span><span class="p">;</span>
