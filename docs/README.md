@@ -88,6 +88,7 @@ Gate instantiations follow the template `<gate-type> instance-name (output, inpu
 
 ```verilog
 // File Name: Project0_tb.v
+// File Name: Project0_tb.v
 `timescale 1 ns/1 ns
 module TestBench0();
     reg  [2:0] SW;
@@ -96,6 +97,7 @@ module TestBench0();
     Majority M(.a(SW[2]), .b(SW[1]), .c(SW[0]), .m(LEDG[0]));
 
     initial begin
+        $dumpvars(0, TestBench0);
         SW = 3'b000; #5;
         SW = 3'b001; #5;
         SW = 3'b010; #5;
@@ -133,4 +135,4 @@ Submit your code to the [EECS 270 Autograder]({{ site.data.config.links.autograd
 - **All tests pass:** verify the top-module on LabsLand. Resubmit to Autograder if you find issues.
 
 ## LabsLand Verification
-After simulation passes, verify on a real DE2-115 board through LabsLand. See the [LabsLand Verification Guide](./labsland.html).
+After simulation passes, verify on a real DE2-115 board through LabsLand. See the [LabsLand Verification Guide](./labsland.html). The link to labsland is available on [Canvas](https://umich.instructure.com/courses/869904).
