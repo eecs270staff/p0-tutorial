@@ -31,6 +31,17 @@ We will install Apio and its required compilers (`iverilog` and `GTKWave`) direc
    apio install --all
    ```
    *Note: This download may take a few minutes. A success message will appear in your terminal when finished.*
+   
+🛑 Common Error:
+If you get the following error - especially if you are on a MAC:
+```
+Error: “apio command not found” 
+```
+Try the following:
+```
+python3 -m pip install -U apio
+apio packages install 
+```
 
 ---
 
