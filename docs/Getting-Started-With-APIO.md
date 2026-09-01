@@ -110,7 +110,7 @@ Open the VS Code built-in terminal (`Terminal` -> `New Terminal`) and run these 
 
 * **Create an ini file (we will change this step later in the course):**
   ```bash
-  apio create --board icestick --top-module Project0.v
+  apio create --board icestick --top-module Project0
   ```
 
 * **To check for syntax errors:**
